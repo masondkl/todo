@@ -1,0 +1,13 @@
+@keyframes load-animation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+html {
+    animation: load-animation;
+    animation-duration: 1000ms;
+}

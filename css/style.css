@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+
+@keyframes rainbow {
+    0% {
+        color: indigo;
+    }
+    17% {
+        color: red;
+    }
+    34% {
+        color: orange;
+    }
+    51% {
+        color: yellow;
+    }
+    68% {
+        color: green;
+    }
+    85% {
+        color: blue;
+    }
+    100% {
+        color: indigo;
+    }
+}
+
+.module {
+    width: 99%;
+    height: auto;
+    font-family: 'Bebas Neue', cursive;
+    color: rgb(31, 31, 31);
+    background-color: gray;
+    padding: 0.5%;
+}
+
+.module h1 {
+    font-size: 200%;
+    color: white;
+    padding: 1%;
+    text-align: center;
+
+    word-wrap: break-word;
+}
+
+.module p {
+    text-align: center;
+    padding: 0.5%;
+    font-family: 'Roboto Slab', serif;
+    background-color: rgb(175, 175, 175);
+    
+    word-wrap: break-word;
+}
+
+form {
+    z-index: 1;
+    position: absolute;
+
+    width: 100%;
+    font-family: 'Bebas Neue', cursive;
+    color: rgb(31, 31, 31);
+    background-color: gray;
+    padding: 0.5%;
+}
+
+form legend {
+    font-size: 200%;
+    color: white;
+    padding: 1%;
+    text-align: center;
+
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    text-overflow: clip;
+}
+
+form fieldset {
+    text-align: center;
+    padding: 0.5%;
+    font-family: 'Roboto Slab', serif;
+    background-color: rgb(175, 175, 175);
+}
+
+form fieldset label {
+    color: rgb(31, 31, 31);
+    font-family: 'Roboto Slab', serif;
+    margin-right: 10px;
+}
+
+form fieldset input[type="text"] {
+    width: 90%;
+}
+
+html {
+    background-color: rgb(223, 223, 223);
+}
+
+nav h1 {
+    animation: rainbow infinite;
+    animation-duration: 5s;
+
+    font-family: 'Bebas Neue', cursive;
+    font-size: 400%;
+}
+
+footer #add {
+    width: 50px;
+    height: 50px;
+
+    border-radius: 50%;
+
+    background-image: url("../img/add.png");
+    cursor: pointer;
+    position: absolute;
+    top: 92%;
+    left: 1%;
+}
+
+.high-priority {
+    background-color: red;
+}
+
+.med-priority {
+    background-color: yellow;
+}
+
+.low-priority {
+    background-color: blue;
+}

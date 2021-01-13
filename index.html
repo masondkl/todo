@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/load.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>Manager</title>
+</head>
+
+<body>
+    <nav>
+        <h1>todo</h1>
+        <div class="social">
+            <a href="https://www.facebook.com" target="_blank"><img src="img/facebook-logo.png" alt="Facebook logo" title="Facebook logo" /></a>
+            <a href="https://www.twitter.com" target="_blank"><img src="img/twitter-logo.png" alt="Twitter logo" title="Twitter logo" /></a>
+        </div>
+    </nav>
+
+    <div>
+        <ul id="modules">
+            
+        </ul>
+    </div>
+</body>
+
+<footer>
+    <a id="add" onclick="alert('hi'); document.getElementById('modules').appendChild(createModule());"></a>
+</footer>
+
+<script>
+    var count = 0;
+    var stringifiedModules = "";
+
+    function createCookie() {
+        let expiresDate = new Date();
+
+        expiresDate.setHours(expiresDate.getHours() + 72);
+
+        if (stringifiedModules.length > 0) {
+            document.cookie = `modules=${stringifiedModules}`;
+        }
+    }
+
+    function readCookie() {
+        let stringifiedModules = document.cookie.substring(document.cookie.lastIndexOf("=") + 1),
+            arrStringifiedModules = stringifiedModules.split("<");
+
+        for (let i = 0; i < arrStringifiedModules.length; i++) {
+            parseModule(arrStringifiedModules[i]);
+        }
+    }
+    
+    function finishModule(event, id) {
+        event.preventDefault();
+
+        let module = document.createElement("li"),
+            header = document.createElement("h1"),
+            action = document.createElement("p");
+
+        module.className = "module";
+
+        let formPriority = document.getElementById(id + "-priority").value,
+            formHeader = document.getElementById(id + "-title").value,
+            formAction = document.getElementById(id + "-action").value;
+
+        formPriority.substring(0, Math.min(formPriority.length, 36));
+
+        if (formPriority == "High") {
+            header.classList.add("high-priority");
+        } else if (formPriority == "Medium") {
+            header.classList.add("med-priority");
+        } else if (formPriority == "Low") {
+            header.classList.add("low-priority");
+        }
+
+        console.log(formHeader);
+
+        formHeader = formHeader.replaceAll("<", "");
+        formHeader = formHeader.replaceAll(">", "");
+
+        formAction = formAction.replaceAll("<", "");
+        formAction = formAction.replaceAll(">", "");
+
+        header.innerHTML = formHeader;
+        action.innerHTML = formAction;
+
+        module.appendChild(header);
+        module.appendChild(action);
+        
+        let modules = document.getElementById("modules"),
+            form = document.getElementById(id + "-form");
+        
+        modules.removeChild(form);
+        modules.appendChild(module);
+
+        stringifiedModules = stringifiedModules + stringifyModule(formPriority, formHeader, formAction);
+
+        createCookie();
+    }
+    
+    function existingModule(formPriority, formHeader, formAction) {
+        if (!formPriority || !formHeader || !formAction) {
+            return;
+        }
+
+        count += 1;
+        event.preventDefault();
+
+        let module = document.createElement("li"),
+            header = document.createElement("h1"),
+            action = document.createElement("p");
+
+        module.className = "module";
+
+        if (module.addEventListener) {
+            module.addEventListener("mousedown", _e => {
+                cursor = module;
+            }, false);
+        } else if (module.attachEvent) {
+            module.attachEvent("onmousedown", _e => {
+
+                cursor = module;
+            });
+        }
+
+        formPriority.substring(0, Math.min(formPriority.length, 36));
+
+        if (formPriority == "High") {
+            header.classList.add("high-priority");
+        } else if (formPriority == "Medium") {
+            header.classList.add("med-priority");
+        } else if (formPriority == "Low") {
+            header.classList.add("low-priority");
+        }
+
+        header.innerHTML = formHeader;
+        action.innerHTML = formAction;
+
+        module.appendChild(header);
+        module.appendChild(action);
+        
+        let modules = document.getElementById("modules");
+        
+        stringifiedModules = stringifiedModules + stringifyModule(formPriority, formHeader, formAction);
+
+        modules.appendChild(module);
+    }
+
+    function createModule() {
+        count += 1;
+
+        let priorityOptions = ["High", "Medium", "Low"];
+
+        let formElement = document.createElement("form"),
+            legendElement = document.createElement("legend"),
+            titleFieldSet = createModuleFieldSet("title", "input", "text", true, count.toString(), "Title"),
+            priorityFieldSet = createModuleFieldSet("priority", "select", "text", true, count.toString(), "Priority"),
+            actionFieldSet = createModuleFieldSet("action", "input", "text", true, count.toString(), "Action"),
+            submitFieldSet = createModuleFieldSet("submit", "input", "submit", true, count.toString(), "");
+        
+        formElement.id = count.toString() + "-form";
+        legendElement.innerHTML = "Setup module";
+
+        for (let i = 0; i < priorityOptions.length; i++) {
+            let option = document.createElement("option");
+
+            option.value = priorityOptions[i];
+            option.innerHTML = priorityOptions[i];
+
+            priorityFieldSet.children[1].appendChild(option);
+        }
+
+        let id = count;
+        
+        if (formElement.addEventListener) {
+            formElement.addEventListener("submit", (event) => finishModule(event, id.toString()), false);
+        } else if (formElement.attachEvent) {
+            formElement.attachEvent("onsubmit", (event) => finishModule(event, id.toString()));
+        }
+
+        formElement.appendChild(legendElement);
+        formElement.appendChild(titleFieldSet);
+        formElement.appendChild(actionFieldSet);
+        formElement.appendChild(priorityFieldSet);
+        formElement.appendChild(submitFieldSet);
+
+        return formElement;
+    }
+
+    function parseModule(stringModule) {
+        let args = stringModule.split(">");
+
+        existingModule(args[0], args[1], args[2]);
+    }
+
+    function stringifyModule(formPriority, formHeader, formAction) {
+        return `${formPriority}>${formHeader}>${formAction}<`
+    }
+
+    function createModuleFieldSet(name, element, type, required, id, title) {
+        let fieldSet = document.createElement("fieldset"),
+            label = document.createElement("label"),
+            input = document.createElement(element);
+
+        label.htmlFor = name;
+        label.innerHTML = title;
+
+        input.name = name;
+        input.type = type;
+        input.required = Boolean.toString(required);
+        input.id = id + "-" + name;
+
+        fieldSet.appendChild(label);
+        fieldSet.appendChild(input);
+
+        return fieldSet;
+    }
+
+    function setup() {
+        readCookie();
+    }
+
+    if (window.addEventListener) {
+        window.addEventListener("load", setup, false);
+    } else if (window.attachEvent) {
+        window.attachEvent("onload", setup);
+    }
+</script>
+</html>
